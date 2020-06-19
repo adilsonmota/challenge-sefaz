@@ -10,7 +10,7 @@ public class JdbcUtil {
 	private static Connection connection = null;
 	private static String user = "sa";
 	private static String password = "sa";
-	private static String PathBase = "\\chalenge-sefaz\\dataBase";
+	private static String PathBase = "C:\\Users\\adilson\\SEFAZ-J2EE\\chalenge-sefaz\\chalenge-sefaz\\dataBase";
 	private static final String URL = "jdbc:hsqldb:file:" + PathBase;
 	
 	public static Connection getConnection() {

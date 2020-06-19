@@ -1,2 +1,10 @@
+util\SessionUtil.class
+dao\UserDAO.class
+entities\User.class
+entities\Phone.class
+dao\UserDAOImpl.class
+util\GrowlView.class
+control\LoginBean.class
+entities\Contact.class
 util\JdbcUtil.class
-teste\Teste.class
+control\UserBean.class
