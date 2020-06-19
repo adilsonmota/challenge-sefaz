@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	
+</h:head>
+
+<h:body>
+		
+	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
+	
+	<h3>Adicionar novo contato</h3>
+	
+	<style type="text/css">
+	    .label {
+	        width:20%;
+	        padding:4px;
+	    }
+	 
+	    .value {
+	        width:80%;
+	        padding:4px;
+	    }
+	 
+	    .grid {
+	        width:100%;
+	    }
+	 
+	    .error {
+	        color: red;
+	    }
+	 
+	    .outputLabel {
+	        font-weight: bold;
+	    }
+	 
+	    .grid {
+	        width:33%;
+	        padding:4px;
+	    }
+	    
+	    .semBorda tr, .semBorda td {
+			border: none !important;
+			vertical-align: top;
+		}
+	    
+	</style>
+	
+  
+	<h:form id="form">
+		<p:growl id="growl" showDetail="true" showSummary="false" sticky="false" /> 
+		
+		<p:panel header="Dados Pessoais" id="dados">
+		    <h:panelGrid columns="2" columnClasses="label, value">
+		        <h:outputText value="Nome *"/><p:inputText size="40" value="#{ContactBean.newContact.name}" required="true" label="Name" onblur="value=value.toUpperCase()"/>
+		        <h:outputText value="Email: *"/><p:inputText size="40" value="#{ContactBean.newContact.email}" required="true" label="Email" onblur="value=value.toLowerCase()"/>
+		    </h:panelGrid>
+		</p:panel>
+ 
+   		<p:panel header="Detalhe de Telefone" id="telefone">
+            <p:panelGrid styleClass="semBorda">
+              	<p:row>
+               		<p:column><h:outputText value="Tipo: "/></p:column>
+                	<p:column>
+                	    <p:selectOneButton value="#{ContactBean.newPhone.typ}" required="true" label="Tipo">
+					       <f:selectItem itemLabel="Fixo" itemValue="FIXO" />
+					       <f:selectItem itemLabel="Móvel" itemValue="MÓVEL" />
+					    </p:selectOneButton>
+                	</p:column>
+                	<p:column>
+		               	<p:dataTable value="#{ContactBean.listPhones}" var="ph" id="phoneTable">
+					    	<p:column headerText="Tipo">
+					        	<h:outputText value="#{ph.typ}" />
+							</p:column>
+					        <p:column headerText="DDD">
+					        	<h:outputText value="#{ph.ddd}" />
+							</p:column>
+					        <p:column headerText="Número">
+					        	<h:outputText value="#{ph.numbr}" />
+							</p:column>
+					        <p:column headerText="Ação">
+					        	<p:commandLink value="Remover" update=":form:phoneTable" process=":form:phoneTable">
+									<p:collector value="#{ph}" removeFrom="#{ContactBean.listPhones}" unique="true"/>
+					            </p:commandLink>
+							</p:column>
+				        </p:dataTable>
+			        </p:column>
+				</p:row>
+                <p:row>
+                	<p:column><h:outputText value="DDD: "/></p:column>
+                	<p:column><p:inputMask value="#{ContactBean.newPhone.ddd}" mask="99" required="true" label="ddd"/></p:column>
+				</p:row>
+                <p:row>
+                	<p:column><h:outputText value="Número: "/></p:column>
+                	<p:column><p:inputMask value="#{ContactBean.newPhone.numbr}" mask="9-9999-9999" required="true" label="Número Telefone"/></p:column>
+				</p:row>
+                <p:row>
+                	<p:column><p:commandButton id="resetPhone" value="limpar" type="reset"/></p:column>
+            		<p:column>
+            			<p:commandButton id="addPhone" value="Add" update=":form:telefone" process=":form:telefone" action="#{ContactBean.reinit}" >
+                			<p:collector value="#{ContactBean.newPhone}" addTo="#{ContactBean.listPhones}"  unique="true"/>
+                		</p:commandButton>
+                	</p:column>
+                </p:row>
+			</p:panelGrid>
+		</p:panel>
+
+    	<p:panel header="Confirmação">
+			<h:panelGrid columns="1">
+				<p:commandButton value="Salvar" actionListener="#{ContactBean.saveAll}" update="@form" process="@this form:dados" partialSubmit="true"/>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+	
+</h:body>
+
+</html>

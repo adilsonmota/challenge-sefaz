@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	
+</h:head>
+
+<h:body>
+		
+	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
+	
+	<h3></h3>
+	
+	<style type="text/css">
+	    .label {
+	        width:20%;
+	        padding:4px;
+	    }
+	 
+	    .value {
+	        width:80%;
+	        padding:4px;
+	    }
+	 
+	    .grid {
+	        width:100%;
+	    }
+	 
+	    .error {
+	        color: red;
+	    }
+	 
+	    .outputLabel {
+	        font-weight: bold;
+	    }
+	 
+	    .grid {
+	        width:33%;
+	        padding:4px;
+	    }
+	    
+	    .semBorda tr, .semBorda td {
+			border: none !important;
+			vertical-align: top;
+		}
+	    
+	</style>
+  
+	<h:form id="form1">
+    	<p:panel header="Buscar contatos" id="buscar">
+        	<h:panelGrid columns="3">
+            	<h:outputText value="Buscar por: "/><p:inputText size="60" value="#{ContactBean.keyword}" placeholder="deixe vazio para todos" onblur="value=value.toUpperCase()"/>
+                	<p:commandButton value="Ok" update=":form1 :form2" actionListener="#{ContactBean.search}"/>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+
+	<h:form id="form2">
+	
+		 <p:panel header="listagem de contatos" id="listagem">
+		 
+			<p:dataTable value="#{ContactBean.listContacts}" var="ct" id="contactsTable" >
+				<p:column headerText="Nome" style="width:100px">
+					<h:outputText value="#{ct.name}" />
+				</p:column>
+				<p:column headerText="Email" style="width:100px">
+					<h:outputText value="#{ct.email}" />
+				</p:column>
+				<p:column headerText="Telefones" style="width:100px">
+				  
+					<p:dataTable value="#{ct.phones}" var="ph" >
+						<p:column headerText="Tipo" style="width:5px">
+							<h:outputText value="#{ph.typ}" />
+						</p:column>
+						<p:column headerText="DDD" style="width:5px">
+							<h:outputText value="#{ph.ddd}" />
+						</p:column>
+						<p:column headerText="Número" style="width:10px">
+							<h:outputText value="#{ph.numbr}" />
+						</p:column>
+					</p:dataTable>
+					
+				</p:column>	
+			</p:dataTable>
+		</p:panel>
+		
+	</h:form>
+	
+</h:body>
+
+</html>
