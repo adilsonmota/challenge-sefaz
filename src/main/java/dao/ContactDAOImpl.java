@@ -47,7 +47,7 @@ public class ContactDAOImpl implements ContactDAO {
 	}
 
 	public void update(Contact contact) {
-		String sql = "UPDATE TB_CONTACT SET NAME=?, EMAIL=?, WHERE ID=?";
+		String sql = "UPDATE TB_CONTACT SET NAME=?, EMAIL=? WHERE ID=?";
 
 		Connection conn;
 		try{
@@ -66,7 +66,7 @@ public class ContactDAOImpl implements ContactDAO {
 		}
 	}
 
-	public void remove(Contact contact) {
+	public void delete(Contact contact) {
 		String sql = "DELETE FROM TB_CONTACT WHERE ID=?";
 
 		Connection conn;

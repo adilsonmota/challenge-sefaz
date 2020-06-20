@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Contact;
 import entities.Phone;
 import util.JdbcUtil;
 
@@ -33,28 +34,7 @@ public class PhoneDAOImpl implements PhoneDAO {
 		}
 	}
 
-	public void update(Phone phone) {
-		String sql = "UPDATE TB_PHONE SET TYP=?, DDD=?, NUMBR=? WHERE ID=?";
-
-		Connection conn;
-		try {
-			conn = JdbcUtil.getConnection();
-
-			PreparedStatement ps = conn.prepareStatement(sql);
-
-			ps.setString(1, phone.getTyp());
-			ps.setInt(2, phone.getDdd());
-			ps.setString(3, phone.getNumbr());
-			ps.setLong(4, phone.getId());
-			ps.execute();
-			ps.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void remove(Phone phone) {
+	public void delete(Long id) {
 		String sql = "DELETE FROM TB_PHONE WHERE ID=?";
 
 		Connection conn;
@@ -63,7 +43,7 @@ public class PhoneDAOImpl implements PhoneDAO {
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
-			ps.setLong(1, phone.getId());
+			ps.setLong(1, id);
 			ps.execute();
 			ps.close();
 
@@ -72,8 +52,9 @@ public class PhoneDAOImpl implements PhoneDAO {
 		}
 	}
 
-	public List<Phone> findAll() {
-		String sql = "SELECT ID, TYP, DDD, NUMBR FROM TB_PHONE";
+	public List<Phone> findByContact(Contact contact) {
+		String sql = "SELECT ID, TYP, DDD, NUMBR FROM TB_PHONE "
+					+ "WHERE CONTACT_ID=?";
 
 		List<Phone> listPhones = new ArrayList<Phone>();
 
@@ -82,7 +63,9 @@ public class PhoneDAOImpl implements PhoneDAO {
 			conn = JdbcUtil.getConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-
+			
+			ps.setLong(1, contact.getId());
+			
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

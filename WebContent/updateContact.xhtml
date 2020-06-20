@@ -41,8 +41,8 @@
 			border: none !important;
 			vertical-align: top;
 		}
-		
-			    body {
+	    
+	    body {
 		  margin: 0;
 		  font-family: Arial, Helvetica, sans-serif;
 		}
@@ -67,27 +67,24 @@
 		}
 	    
 	</style>
-	
-	<div class="topnav">
+ 
+ 	<div class="topnav">
 	  <a href="search.xhtml">Buscar</a>
-	  <a href="#">Cadastrar</a>
-	  <a href="updateContact.xhtml">Atualizar</a>
+	  <a href="newContact.xhtml">Cadastar</a>
+	  <a href="#">Atualizar</a>
 	</div>
-	
-  	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
-	<h3>Adicionar novo contato</h3>
-	
+ 
+	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
+  	<h3>Alterar contato</h3>
 	<h:form id="form">
-		<p:growl id="growl" showDetail="true" showSummary="false" sticky="false" /> 
 		
 		<p:panel header="Dados Pessoais" id="dados">
 		    <h:panelGrid columns="2" columnClasses="label, value">
-		        <h:outputText value="Nome *"/><p:inputText size="40" value="#{ContactBean.newContact.name}" required="true" label="Name" onblur="value=value.toUpperCase()"/>
-		        <h:outputText value="Email: *"/><p:inputText size="40" value="#{ContactBean.newContact.email}" required="true" label="Email" onblur="value=value.toLowerCase()"/>
+		        <h:outputText value="Nome *"/><p:inputText size="40" value="#{ContactBean.selectedContact.name}" required="true" label="Name" onblur="value=value.toUpperCase()"/>
+		        <h:outputText value="Email: *"/><p:inputText size="40" value="#{ContactBean.selectedContact.email}" required="true" label="Email" onblur="value=value.toLowerCase()"/>
 		    </h:panelGrid>
 		</p:panel>
- 
-   		<p:panel header="Detalhe de Telefone" id="telefone">
+		<p:panel header="Detalhe de telefone" id="telefone">
 	 		<p:dialog header="Telefone" id="dlgPhone" widgetVar="dlg" modal="true" showEffect="fade" hideEffect="fade">	
 	            <h:panelGrid columns="2">
 	               		<h:outputText value="Tipo: "/>
@@ -106,31 +103,38 @@
 				</h:panelGrid>
 			</p:dialog>
 			
-			<p:commandButton value="add" onclick="PF('dlg').show();" process="@this :form:telefone" partialSubmit="true"/>
-			<p:dataTable value="#{ContactBean.listPhones}" var="ph" id="phoneTable" style="width:350">
+			<p:commandButton value="add" onclick="PF('dlg').show();"/>
+			<p:dataTable value="#{ContactBean.listPhones}" var="ph" id="phoneTable" style="width:400">
 		    	<p:column headerText="Tipo" style="width:50">
 		        	<h:outputText value="#{ph.typ}" />
 				</p:column>
-		        <p:column headerText="DDD" style="width:30">
+		        <p:column headerText="DDD" style="width:50">
 		        	<h:outputText value="#{ph.ddd}" />
 				</p:column>
 		        <p:column headerText="Número" style="width:100">
 		        	<h:outputText value="#{ph.numbr}" />
 				</p:column>
-				<p:column headerText="Ação" style="width:80">
-					<p:commandLink value="Remover" update=":form:phoneTable" process="@this :form:phoneTable">
-						<p:collector value="#{ph}" removeFrom="#{ContactBean.listPhones}" unique="true"/>
-				    </p:commandLink>
+		        <p:column headerText="Ação" style="width:110">
+		        	<p:commandLink value="Excluir telefone" update=":form:phoneTable" process=":form:phoneTable" action="#{ContactBean.prepDelPhone}">
+						<p:collector value="#{ph}" removeFrom="#{ContactBean.listPhones}" unique="true"  />
+						<f:setPropertyActionListener value="#{ph}" target="#{ContactBean.selectedPhone}" />
+		            </p:commandLink>
 				</p:column>
-				</p:dataTable>
-            
+			</p:dataTable>
+			
 		</p:panel>
-
     	<p:panel header="Confirmação">
 			<h:panelGrid columns="1">
-				<p:commandButton value="Salvar" update="@form" process="@this :form:dados" partialSubmit="true" actionListener="#{ContactBean.saveAll}" />
+				<p:commandButton value="Salvar" action="#{ContactBean.updateAll}" update="@form" process="@this form:dados" partialSubmit="true"/>
 			</h:panelGrid>
 		</p:panel>
+		
+		<p:panel header="Excluir Contato">
+			<h:panelGrid columns="1">
+				<p:commandButton value="Excluir" action="#{ContactBean.deleteContact}" update="@form" process="@this" />
+			</h:panelGrid>
+		</p:panel>
+		
 	</h:form>
 	
 </h:body>

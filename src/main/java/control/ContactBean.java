@@ -25,7 +25,11 @@ public class ContactBean {
 	private Contact newContact;
 	private Phone newPhone;
 	
+	private Contact selectedContact;
+	private Phone selectedPhone;
+	
 	private List<Phone> listPhones;
+	private List<Phone> deletePhones;
 	private List<Contact> listContacts;
 	
 	private ContactDAO contactDao;
@@ -36,8 +40,11 @@ public class ContactBean {
 		this.currentUser = new User();
 		this.newContact = new Contact();
 		this.newPhone = new Phone();
+		this.selectedContact = new Contact();
+		this.selectedPhone = new Phone();
 		
 		this.listPhones = new ArrayList<Phone>();
+		this.deletePhones = new ArrayList<Phone>();
 		this.listContacts = new ArrayList<Contact>();
 		
 		this.contactDao = new ContactDAOImpl();
@@ -57,22 +64,14 @@ public class ContactBean {
     }
     
     public void saveAll() {
-    	
-    	System.out.println("entrou no método");
-    	
     	if (this.newContact.getName() != null) {
-    		
-    		System.out.println("Entrou no if");
     		
     		this.newContact.setUser(this.currentUser);
     		this.newContact.setId(this.contactDao.insert(this.newContact));
     		
 	    	for (Phone phone : listPhones) {
-	    		
-	    		System.out.println("entrou no for each");
-	    		
 				phone.setContact(this.newContact);
-				phoneDao.insert(phone);
+				this.phoneDao.insert(phone);
 			}
     	}
     	this.newContact = new Contact();
@@ -82,7 +81,55 @@ public class ContactBean {
 	public void search() {
 		this.listContacts = contactDao.searchContact(currentUser, keyword);
 	}
+	
+	public String selectContact() {
+		if (this.selectedContact.getEmail() != null) {
+		
+		this.listPhones = this.phoneDao.findByContact(this.selectedContact);
+		}				
+		return "updateContact.xhtml";
+	}
+	
+	
+	public String updateAll() {
+		if (	(this.selectedContact.getName() != null) && 
+				(this.selectedContact.getEmail() != null)	) {
+    		
+			this.contactDao.update(this.selectedContact);
+			
+	    	for (Phone ph : deletePhones) {
+				this.phoneDao.delete(ph.getId());
+			}
+	    	
+	    	for (Phone phone : listPhones) {
+				phone.setContact(this.selectedContact);
+				this.phoneDao.insert(phone);
+			}
+    	}
+    	this.selectedContact = new Contact();
+    	this.listPhones = new ArrayList<Phone>();
+    	
+    	return "search.xhtml";
+	}
+	
+	public String prepDelPhone() {
+		this.deletePhones.add(this.selectedPhone);
+		this.selectedPhone = new Phone();
+		return null;
+	}
+	
     
+	public String deleteContact() {
+		if (	(this.selectedContact.getName() != null) && 
+				(this.selectedContact.getEmail() != null)	) {
+			this.contactDao.delete(this.selectedContact);
+		}
+		this.selectedContact = new Contact();
+    	this.listPhones = new ArrayList<Phone>();
+    	return "search.xhtml";
+	}
+	
+	
 	public List<Phone> getListPhones() {
 		return listPhones;
 	}
@@ -117,5 +164,21 @@ public class ContactBean {
 
 	public List<Contact> getListContacts() {
 		return listContacts;
+	}
+
+	public Contact getSelectedContact() {
+		return selectedContact;
+	}
+
+	public void setSelectedContact(Contact selectedContact) {
+		this.selectedContact = selectedContact;
+	}
+
+	public Phone getSelectedPhone() {
+		return selectedPhone;
+	}
+
+	public void setSelectedPhone(Phone selectedPhone) {
+		this.selectedPhone = selectedPhone;
 	}
 }
