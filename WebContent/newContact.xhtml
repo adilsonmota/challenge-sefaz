@@ -10,6 +10,7 @@
 <h:body>
 	
 	<style type="text/css">
+	
 	    .label {
 	        width:20%;
 	        padding:4px;
@@ -71,7 +72,7 @@
 	<div class="topnav">
 	  <a href="search.xhtml">Buscar</a>
 	  <a href="#">Cadastrar</a>
-	  <a href="updateContact.xhtml">Atualizar</a>
+	  <a href="myData.xhtml">Meus dados</a>
 	</div>
 	
   	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
@@ -80,57 +81,67 @@
 	<h:form id="form">
 		<p:growl id="growl" showDetail="true" showSummary="false" sticky="false" /> 
 		
-		<p:panel header="Dados Pessoais" id="dados">
+		<p:panel header="Dados Pessoais" id="dataDetail">
 		    <h:panelGrid columns="2" columnClasses="label, value">
-		        <h:outputText value="Nome *"/><p:inputText size="40" value="#{ContactBean.newContact.name}" required="true" label="Name" onblur="value=value.toUpperCase()"/>
-		        <h:outputText value="Email: *"/><p:inputText size="40" value="#{ContactBean.newContact.email}" required="true" label="Email" onblur="value=value.toLowerCase()"/>
+		        <h:outputText value="Nome *"/><p:inputText size="40" value="#{ContactBean.newContact.name}" 
+		        								required="true" label="Nome" onblur="value=value.toUpperCase()"/>
+		        <h:outputText value="Email: *"/><p:inputText size="40" value="#{ContactBean.newContact.email}" 
+		        								required="true" label="Email" onblur="value=value.toLowerCase()"/>
 		    </h:panelGrid>
 		</p:panel>
  
-   		<p:panel header="Detalhe de Telefone" id="telefone">
-	 		<p:dialog header="Telefone" id="dlgPhone" widgetVar="dlg" modal="true" showEffect="fade" hideEffect="fade">	
+   		<p:panel header="Detalhe de Telefone" id="phoneDetail">
+	 		<p:dialog header="Telefone" id="dlgPhone" widgetVar="dlg" modal="true" showEffect="fade" hideEffect="fade">
+	 			
 	            <h:panelGrid columns="2">
 	               		<h:outputText value="Tipo: "/>
-	               		<p:selectOneButton value="#{ContactBean.newPhone.typ}" required="true" label="Tipo">
-							<f:selectItem itemLabel="Fixo" itemValue="FIXO" />
-						    <f:selectItem itemLabel="Móvel" itemValue="MÓVEL" />
-						</p:selectOneButton>
-	                	<h:outputText value="DDD: "/>
-	                	<p:inputMask value="#{ContactBean.newPhone.ddd}" mask="99" required="true" label="ddd"/>
-	                	<h:outputText value="Número: "/>
-	                	<p:inputMask value="#{ContactBean.newPhone.numbr}" mask="9-9999-9999" required="true" label="Número Telefone"/>
+		               		<p:selectOneButton value="#{ContactBean.newPhone.typ}" required="true" label="Tipo">
+								<f:selectItem itemLabel="Fixo" itemValue="FIXO" />
+							    <f:selectItem itemLabel="Móvel" itemValue="MÓVEL" />
+							</p:selectOneButton>
+	                	<h:outputText value="DDD: "/><p:inputMask value="#{ContactBean.newPhone.ddd}" 
+	                									mask="99" required="true" label="ddd"/>
+	                	<h:outputText value="Número: "/><p:inputMask value="#{ContactBean.newPhone.numbr}" 
+	                									mask="9-9999-9999" required="true" label="Número Telefone"/>
 	                	<p:commandButton id="resetPhone" value="limpar" type="reset"/>
-		        		<p:commandButton id="addPhone" value="Add" update=":form:telefone" process="@this :form:telefone" action="#{ContactBean.reinit}" >
+	                	
+		        		<p:commandButton id="addPhone" value="Add" update=":form:phoneDetail" 
+		        						process="@this :form:phoneDetail" action="#{ContactBean.reinit}" >
 	                		<p:collector value="#{ContactBean.newPhone}" addTo="#{ContactBean.listPhones}" unique="true"/>
 	                	</p:commandButton>
 				</h:panelGrid>
 			</p:dialog>
 			
-			<p:commandButton value="add" onclick="PF('dlg').show();" process="@this :form:telefone" partialSubmit="true"/>
+			<p:commandButton value="add" onclick="PF('dlg').show();" process="@this :form:phoneDetail" partialSubmit="true"/>
+			
 			<p:dataTable value="#{ContactBean.listPhones}" var="ph" id="phoneTable" style="width:350">
 		    	<p:column headerText="Tipo" style="width:50">
-		        	<h:outputText value="#{ph.typ}" />
+		    		<h:outputText value="#{ph.typ}" />
 				</p:column>
+				
 		        <p:column headerText="DDD" style="width:30">
 		        	<h:outputText value="#{ph.ddd}" />
 				</p:column>
+				
 		        <p:column headerText="Número" style="width:100">
 		        	<h:outputText value="#{ph.numbr}" />
 				</p:column>
+				
 				<p:column headerText="Ação" style="width:80">
 					<p:commandLink value="Remover" update=":form:phoneTable" process="@this :form:phoneTable">
 						<p:collector value="#{ph}" removeFrom="#{ContactBean.listPhones}" unique="true"/>
 				    </p:commandLink>
 				</p:column>
-				</p:dataTable>
-            
+			</p:dataTable>
 		</p:panel>
 
     	<p:panel header="Confirmação">
 			<h:panelGrid columns="1">
-				<p:commandButton value="Salvar" update="@form" process="@this :form:dados" partialSubmit="true" actionListener="#{ContactBean.saveAll}" />
+				<p:commandButton value="Salvar" update="@form" process="@this :form:dataDetail" 
+								partialSubmit="true" actionListener="#{ContactBean.saveAll}" />
 			</h:panelGrid>
 		</p:panel>
+		
 	</h:form>
 	
 </h:body>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-	<wb-module deploy-name="chalenge-sefaz">
+	<wb-module deploy-name="challenge-sefaz">
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
 		<wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-		<property name="java-output-path" value="/chalenge-sefaz/target/classes"/>
-        <property name="context-root" value="chalenge-sefaz"/>
+		<property name="java-output-path" value="/challenge-sefaz/target/classes"/>
+        <property name="context-root" value="challenge-sefaz"/>
 	</wb-module>
 </project-modules>

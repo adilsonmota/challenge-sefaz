@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>adilson-mota</groupId>
-	<artifactId>chalenge-sefaz</artifactId>
+	<artifactId>challenge-sefaz</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Contacts Maven Webapp</name>
@@ -55,7 +55,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>chalenge-sefaz</finalName>
+		<finalName>challenge-sefaz</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

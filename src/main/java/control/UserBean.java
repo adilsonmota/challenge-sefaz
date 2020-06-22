@@ -53,7 +53,7 @@ public class UserBean {
 		}
 		return null;
 	}
-	
+		
 	public User getNewUser() {
 		return newUser;
 	}

@@ -88,7 +88,8 @@ public class ContactDAOImpl implements ContactDAO {
 		String sql = "SELECT C.ID ID_CONTACT, C.NAME, C.EMAIL, "
 					+"P.ID ID_PHONE, P.TYP, P.DDD, P.NUMBR "
 					+"FROM TB_CONTACT C LEFT JOIN TB_PHONE P "
-					+"ON (C.ID=P.CONTACT_ID)" + inCondition(user, keyword);
+					+"ON (C.ID=P.CONTACT_ID) "
+					+"WHERE C.USER_ID=? " + inCondition(user, keyword);
 		
 		List<Contact> listContacts = new ArrayList<Contact>();
 		
@@ -97,7 +98,9 @@ public class ContactDAOImpl implements ContactDAO {
 			conn = JdbcUtil.getConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-
+			
+			ps.setLong(1, user.getId());
+			
 			ResultSet rs = ps.executeQuery();
 
 			while(rs.next()) {
@@ -126,10 +129,10 @@ public class ContactDAOImpl implements ContactDAO {
 	}
 	
 	private String inCondition(User user, String keyword) {
-		String where = "WHERE C.USER_ID=?";
+		String where = " ";
 		
 		if (keyword != null) {
-			where = "WHERE C.USER_ID="+user.getId()+" AND "
+			where = "AND "
 					+"(C.NAME LIKE'%"+keyword+"%' OR "
 					+"UPPER (C.EMAIL) LIKE'%"+keyword+"%' OR "
 					+"P.TYP LIKE'%"+keyword+"%' OR "

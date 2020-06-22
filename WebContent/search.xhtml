@@ -10,6 +10,7 @@
 <h:body>
 	
 	<style type="text/css">
+	
 	    .label {
 	        width:20%;
 	        padding:4px;
@@ -68,26 +69,26 @@
 	    
 	</style>
 	
-  	 <div class="topnav">
+  	<div class="topnav">
 	  <a href="#">Buscar</a>
 	  <a href="newContact.xhtml">Cadastrar</a>
-	  <a href="updateContact.xhtml">Atualizar</a>
+	  <a href="myData.xhtml">Meus dados</a>
 	</div>
   
   	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
 	<h3></h3>
-  
+  	
 	<h:form id="form">
 	
-    	<p:panel header="Buscar contatos" id="buscar">
+    	<p:panel header="Buscar contatos" id="contactSearch">
         	<h:panelGrid columns="3">
             	<h:outputText value="Buscar por: "/><p:inputText size="60" value="#{ContactBean.keyword}" 
-            					placeholder="deixe vazio para todos" onkeyup="value=value.toUpperCase()"/>
+            										placeholder="deixe vazio para todos" onkeyup="value=value.toUpperCase()"/>
                 <p:commandButton value="Ok" update="@form" actionListener="#{ContactBean.search}"/>
 			</h:panelGrid>
 		</p:panel>
 	
-		 <p:panel header="listagem de contatos" id="listagem">
+		<p:panel header="listagem de contatos" id="contactList">
 		 
 			<p:dataTable value="#{ContactBean.listContacts}" var="ct" id="contactsTable" 
 						selectionMode="single" selection="#{ContactBean.selectedContact}" rowKey="#{ct.id}"
@@ -99,9 +100,11 @@
 				<p:column headerText="Nome" style="width:100px">
 					<h:outputText value="#{ct.name}" />
 				</p:column>
+				
 				<p:column headerText="Email" style="width:100px">
 					<h:outputText value="#{ct.email}" />
 				</p:column>
+				
 				<p:column headerText="Telefones" style="width:100px">
 					<p:dataTable value="#{ct.phones}" var="ph" >
 						<p:column headerText="Tipo" style="width:5px">
@@ -112,17 +115,16 @@
 						</p:column>
 						<p:column headerText="Número" style="width:10px">
 							<h:outputText value="#{ph.numbr}" />
-						</p:column>
+						</p:column>	
 					</p:dataTable>
 				</p:column>
+				
 				<f:facet name="footer">
             		<p:commandButton value="Editar" update="@form" action="#{ContactBean.selectContact}"/>
         		</f:facet>	
 			</p:dataTable>
 		</p:panel>
-		
 	</h:form>
-	
 </h:body>
 
 </html>

@@ -10,9 +10,12 @@ import dao.ContactDAO;
 import dao.ContactDAOImpl;
 import dao.PhoneDAO;
 import dao.PhoneDAOImpl;
+import dao.UserDAO;
+import dao.UserDAOImpl;
 import entities.Contact;
 import entities.Phone;
 import entities.User;
+import util.GrowlView;
 import util.SessionUtil;
 
 @ManagedBean(name = "ContactBean")
@@ -20,6 +23,8 @@ import util.SessionUtil;
 public class ContactBean {
 	
 	private String keyword;
+	
+	private String newPassword;
 	
 	private User currentUser;
 	private Contact newContact;
@@ -34,9 +39,12 @@ public class ContactBean {
 	
 	private ContactDAO contactDao;
 	private PhoneDAO phoneDao;
+	private UserDAO userDao;
+	
+	private GrowlView message;
 	
 	public ContactBean() {
-		
+		this.message = new GrowlView();
 		this.currentUser = new User();
 		this.newContact = new Contact();
 		this.newPhone = new Phone();
@@ -49,6 +57,7 @@ public class ContactBean {
 		
 		this.contactDao = new ContactDAOImpl();
 		this.phoneDao = new PhoneDAOImpl();
+		this.userDao = new UserDAOImpl();
 		
 		currentUser();
 	}
@@ -79,36 +88,40 @@ public class ContactBean {
     }
 	
 	public void search() {
-		this.listContacts = contactDao.searchContact(currentUser, keyword);
+		this.listContacts = contactDao.searchContact(this.currentUser, this.keyword);
 	}
 	
 	public String selectContact() {
-		if (this.selectedContact.getEmail() != null) {
-		
-		this.listPhones = this.phoneDao.findByContact(this.selectedContact);
-		}				
-		return "updateContact.xhtml";
+		if (this.selectedContact == null) {
+			message.setErrorMessage("Nenhum contato selecionado");
+			message.saveMessage(false);
+		} else {
+			this.listPhones = this.phoneDao.findByContact(this.selectedContact);
+			return "updateContact.xhtml";
+		}
+		return null;
 	}
-	
 	
 	public String updateAll() {
 		if (	(this.selectedContact.getName() != null) && 
 				(this.selectedContact.getEmail() != null)	) {
     		
-			this.contactDao.update(this.selectedContact);
+				this.contactDao.update(this.selectedContact);
 			
 	    	for (Phone ph : deletePhones) {
 				this.phoneDao.delete(ph.getId());
 			}
-	    	
 	    	for (Phone phone : listPhones) {
-				phone.setContact(this.selectedContact);
-				this.phoneDao.insert(phone);
+	    		if (phone.getId() == null) {
+	    			phone.setContact(this.selectedContact);
+					this.phoneDao.insert(phone);
+				}
+				
 			}
     	}
     	this.selectedContact = new Contact();
     	this.listPhones = new ArrayList<Phone>();
-    	
+    	search();
     	return "search.xhtml";
 	}
 	
@@ -118,17 +131,38 @@ public class ContactBean {
 		return null;
 	}
 	
-    
 	public String deleteContact() {
 		if (	(this.selectedContact.getName() != null) && 
 				(this.selectedContact.getEmail() != null)	) {
 			this.contactDao.delete(this.selectedContact);
-		}
-		this.selectedContact = new Contact();
-    	this.listPhones = new ArrayList<Phone>();
-    	return "search.xhtml";
+			this.selectedContact = new Contact();
+			this.listPhones = new ArrayList<Phone>();
+		} else {
+			message.setErrorMessage("Nenhum contato selecionado");
+			message.saveMessage(false);
+		} 
+		search();
+		return "search.xhtml";
 	}
 	
+	public void updateUser() {
+		if (this.newPassword != null && !this.newPassword.isEmpty()) {
+			this.currentUser.setPassword(newPassword);
+		}
+		if (this.currentUser.getName() != null) {
+			this.userDao.update(this.currentUser);
+			message.setSuccessMessage("Dados alterados com sucesso!");
+			message.saveMessage(true);
+		} 
+	}
+	
+	public String cancel() {
+		this.listContacts = new ArrayList<Contact>();
+		this.selectedContact = new Contact();
+		this.listPhones = new ArrayList<Phone>();
+		this.keyword = null;
+		return "search.xhtml";
+	}
 	
 	public List<Phone> getListPhones() {
 		return listPhones;
@@ -180,5 +214,13 @@ public class ContactBean {
 
 	public void setSelectedPhone(Phone selectedPhone) {
 		this.selectedPhone = selectedPhone;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 }
