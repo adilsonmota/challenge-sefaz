@@ -134,10 +134,7 @@ public class ContactDAOImpl implements ContactDAO {
 		if (keyword != null) {
 			where = "AND "
 					+"(C.NAME LIKE'%"+keyword+"%' OR "
-					+"UPPER (C.EMAIL) LIKE'%"+keyword+"%' OR "
-					+"P.TYP LIKE'%"+keyword+"%' OR "
-					+"P.DDD LIKE'%"+keyword+"%' OR "
-					+"P.NUMBR LIKE'%"+keyword+"%')";
+					+"UPPER (C.EMAIL) LIKE'%"+keyword+"%')";
 		}
 		return where;
 	}

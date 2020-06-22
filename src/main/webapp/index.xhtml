@@ -18,7 +18,8 @@
 		 
 			<h:panelGrid columns="1" cellpadding="2">
 		    	<p:outputLabel value="Username:"/><p:inputText value="#{LoginBean.usrLogin}" size="20" 
-		    						label="Username" required="true" style="text-transform:lowercase"/>
+		    						label="Username" required="true" onblur="value=value.toLowerCase()"
+		    						onkeyup="value=value.replace(/[' ']/g,'')" />
 		        <p:outputLabel value=" Senha:"/><p:password value="#{LoginBean.pswLogin}" 
 		        					id="psw" label="Password" required="true" size="20"/> 
 		 	</h:panelGrid>

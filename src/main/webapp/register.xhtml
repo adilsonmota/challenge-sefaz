@@ -14,9 +14,10 @@
 			 
 			<h:panelGrid columns="2" cellpadding="2">
 				<p:outputLabel value="Nome:"/><p:inputText value="#{UserBean.newUser.name}" size="40" label="Nome" 
-														required="true" placeholder="Nome completo"/>
+														required="true" placeholder="Nome completo" onblur="value=value.toUpperCase()"/>
 				<p:outputLabel value="Username:"/><p:inputText value="#{UserBean.newUser.username}" placeholder="Apelido ou Email" 
-														size="40" label="Username" required="true" style="text-transform:lowercase"/>
+														size="40" label="Username" required="true" onblur="value=value.toLowerCase()"
+														onkeyup="value=value.replace(/[' ']/g,'')" />
 				<p:outputLabel value="Senha:"/><p:password id="psw1" match="psw2" required="true" label="Senha1" feedback="true" 
 														size="40"/>
 	            <p:outputLabel value="Confirma senha:"/><p:password value="#{UserBean.newUser.password}" id="psw2" label="Senha2" 

@@ -6,12 +6,14 @@ import java.sql.SQLException;
 
 public class JdbcUtil {
 	
-	private static final String DRIVER_CLASS = "org.hsqldb.jdbcDriver";
+	private static final String DRIVER_CLASS = "org.postgresql.Driver";
 	private static Connection connection = null;
-	private static String user = "sa";
-	private static String password = "sa";
-	private static String PathBase = "C:\\Users\\adilson\\SEFAZ-J2EE\\chalenge-sefaz\\chalenge-sefaz\\dataBase";
-	private static final String URL = "jdbc:hsqldb:file:" + PathBase;
+	private static String user = "tsofrfptwhkxsd";
+	private static String password = "58d81749ac6f14bba9f601089d700133ca16ad431f26abc40f53d7cbdb720468";
+	private static String host="ec2-18-232-143-90.compute-1.amazonaws.com";
+	private static String database="d56ooj6au7ltsf";
+	
+	private static final String URL = "jdbc:postgresql://" + host + ":5432/" + database + "?sslmode=require";
 	
 	public static Connection getConnection() {
 		if (connection == null) {
