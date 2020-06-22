@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	
+</h:head>
+
+<h:body>
+	
+	<style type="text/css">
+	
+	    .label {
+	        width:20%;
+	        padding:4px;
+	    }
+	 
+	    .value {
+	        width:80%;
+	        padding:4px;
+	    }
+	 
+	    .grid {
+	        width:100%;
+	    }
+	 
+	    .error {
+	        color: red;
+	    }
+	 
+	    .outputLabel {
+	        font-weight: bold;
+	    }
+	 
+	    .grid {
+	        width:33%;
+	        padding:4px;
+	    }
+	    
+	    .semBorda tr, .semBorda td {
+			border: none !important;
+			vertical-align: top;
+		}
+	    
+	    	    body {
+		  margin: 0;
+		  font-family: Arial, Helvetica, sans-serif;
+		}
+		
+		.topnav {
+		  overflow: hidden;
+		  background-color: #333;
+		}
+		
+		.topnav a {
+		  float: left;
+		  display: block;
+		  color: #f2f2f2;
+		  text-align: center;
+		  padding: 14px 16px;
+		  text-decoration: none;
+		}
+		
+		.topnav a:hover {
+		  background-color: #ddd;
+		  color: black;
+		}
+	    
+	</style>
+	
+  	<div class="topnav">
+	  <a href="#">Buscar</a>
+	  <a href="newContact.xhtml">Cadastrar</a>
+	  <a href="myData.xhtml">Meus dados</a>
+	</div>
+  
+  	<h3>Olá, <h:outputText value="#{ContactBean.currentUser.name}"/></h3>
+	<h3></h3>
+  	
+	<h:form id="form">
+	
+    	<p:panel header="Buscar contatos" id="contactSearch">
+        	<h:panelGrid columns="3">
+            	<h:outputText value="Buscar por: "/><p:inputText size="60" value="#{ContactBean.keyword}" 
+            										placeholder="deixe vazio para todos" onkeyup="value=value.toUpperCase()"/>
+                <p:commandButton value="Ok" update="@form" actionListener="#{ContactBean.search}"/>
+			</h:panelGrid>
+		</p:panel>
+	
+		<p:panel header="listagem de contatos" id="contactList">
+		 
+			<p:dataTable value="#{ContactBean.listContacts}" var="ct" id="contactsTable" 
+						selectionMode="single" selection="#{ContactBean.selectedContact}" rowKey="#{ct.id}"
+						rows="5" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+						{PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+		                rowsPerPageTemplate="5,10,15" sortBy="#{ct.name}">
+		                
+				<p:column headerText="Nome" style="width:100px">
+					<h:outputText value="#{ct.name}" />
+				</p:column>
+				
+				<p:column headerText="Email" style="width:100px">
+					<h:outputText value="#{ct.email}" />
+				</p:column>
+				
+				<p:column headerText="Telefones" style="width:100px">
+					<p:dataTable value="#{ct.phones}" var="ph" >
+						<p:column headerText="Tipo" style="width:5px">
+							<h:outputText value="#{ph.typ}" />
+						</p:column>
+						<p:column headerText="DDD" style="width:5px">
+							<h:outputText value="#{ph.ddd}" />
+						</p:column>
+						<p:column headerText="Número" style="width:10px">
+							<h:outputText value="#{ph.numbr}" />
+						</p:column>	
+					</p:dataTable>
+				</p:column>
+				
+				<f:facet name="footer">
+            		<p:commandButton value="Editar" update="@form" action="#{ContactBean.selectContact}"/>
+        		</f:facet>	
+			</p:dataTable>
+		</p:panel>
+	</h:form>
+</h:body>
+
+</html>
